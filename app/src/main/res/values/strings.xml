@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BlurCapture</string>
+    <string name="picture_button">Take picture</string>
+</resources>
