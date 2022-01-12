@@ -25,9 +25,12 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.AudioManager;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaActionSound;
 import android.media.MediaScannerConnection;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -437,11 +440,20 @@ public class FullscreenActivity extends AppCompatActivity {
 
     void createCameraSession()
     {
+
+
+        final SoundPool soundPool = new SoundPool.Builder().setMaxStreams(5).build();
+        int soundId = soundPool.load(this, R.raw.pop, 1);
+
+
         mImageWriter= ImageReader.newInstance(mCaptureSize.getWidth(),mCaptureSize.getHeight(),ImageFormat.JPEG,10);
         mImageWriter.setOnImageAvailableListener(
                 new ImageReader.OnImageAvailableListener() {
                     @Override
                     public void onImageAvailable(ImageReader imageReader) {
+
+                        soundPool.play(soundId, 1, 1, 0, 0, 1);
+
                         saveImage(imageReader.acquireNextImage());
                     }
                 }
@@ -524,6 +536,7 @@ public class FullscreenActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        img.close();
     }
 
     void chooseResolution(StreamConfigurationMap map)
